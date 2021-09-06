@@ -1,6 +1,6 @@
 import cv2
 import mediapipe as mp
-from display_fps import DisplayFPS
+from lib.display_fps import DisplayFPS
 from hand_pose_estimation2 import get_pose, face_orientation
 face_mesh = mp.solutions.face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 # cap = cv2.VideoCapture(0)

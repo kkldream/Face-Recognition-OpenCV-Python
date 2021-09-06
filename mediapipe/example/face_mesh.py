@@ -6,7 +6,7 @@ mp_face_mesh = mp.solutions.face_mesh
 
 # For webcam input:
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
-cap = cv2.VideoCapture('test.mp4')
+cap = cv2.VideoCapture(0)
 with mp_face_mesh.FaceMesh(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5) as face_mesh:
