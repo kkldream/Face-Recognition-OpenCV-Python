@@ -33,12 +33,6 @@ while cap.isOpened():
 	if results.multi_face_landmarks:
 		for face_landmarks in results.multi_face_landmarks:
 			flm = FaceLandmark(face_landmarks, cap.shape)
-			left_eye_top = flm.get_coordinates('left_eye_top')
-			left_eye_bottom = flm.get_coordinates('left_eye_bottom')
-			right_eye_top = flm.get_coordinates('right_eye_top')
-			right_eye_bottom = flm.get_coordinates('right_eye_bottom')
-			mouth_top = flm.get_coordinates('mouth_top')
-			mouth_bottom = flm.get_coordinates('mouth_bottom')
 			face_top = flm.get_coordinates('face_top')
 			face_bottom = flm.get_coordinates('face_bottom')
 			face_left = flm.get_coordinates('face_left')

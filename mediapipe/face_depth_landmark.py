@@ -4,11 +4,9 @@ from lib.display_fps import DisplayFPS
 
 face_mesh = mp.solutions.face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 cap = CaptureInput(0, 640, 480, 30)
-fps = DisplayFPS()
 
 while cap.isOpened():
 	ret, frame = cap.read()
-	frame = cv2.flip(frame, 1)
 	results = face_mesh.process(frame)
 	if results.multi_face_landmarks:
 		for face_landmarks in results.multi_face_landmarks:
@@ -23,9 +21,6 @@ while cap.isOpened():
 					cv2.circle(frame, pos, 2, (0, 0, int(255 * data_point.z * 50)), -1)
 				else:
 					cv2.circle(frame, pos, 2, (int(255 * data_point.z * -1 * 50), 0, 0), -1)
-			print(boxs)
-	fps.count()
-	fps.print(frame)
 	cv2.imshow('MediaPipe FaceMesh', frame)
 	if cv2.waitKey(50) & 0xFF == 27:
 		break
