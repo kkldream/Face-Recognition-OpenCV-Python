@@ -3,7 +3,7 @@ import mediapipe as mp
 from lib.display_fps import DisplayFPS
 
 face_mesh = mp.solutions.face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
-cap = CaptureInput(0, 1920, 1080, 30)
+cap = CaptureInput(0, 640, 480, 30)
 fps = DisplayFPS()
 
 def get_landmark_pos(num, shape):
@@ -25,7 +25,7 @@ while cap.isOpened():
 				else:
 					boxs = [min(pos[0], boxs[0]), max(pos[0], boxs[1]), min(pos[1], boxs[2]), max(pos[1], boxs[3])]
 				cv2.circle(frame, pos, 1, (0, 0, 255), -1)
-				cv2.putText(frame, str(i), pos, cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 0, 0), 1)
+				# cv2.putText(frame, str(i), pos, cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 0, 0), 1)
 			# frame_copy = frame.copy()[boxs[2]-0:boxs[3]+0, boxs[0]-0:boxs[1]+0]
 			cv2.rectangle(frame, (boxs[0], boxs[2]), (boxs[1], boxs[3]), (0, 255, 0), 2)
 	fps.count()

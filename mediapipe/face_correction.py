@@ -29,6 +29,7 @@ def rotate_xy(pos, center_pos, angle):
 
 while cap.isOpened():
 	ret, frame = cap.read()
+	oframe = frame.copy()
 	results = face_mesh.process(frame)
 	if results.multi_face_landmarks:
 		for face_landmarks in results.multi_face_landmarks:
@@ -37,11 +38,11 @@ while cap.isOpened():
 			face_bottom = flm.get_coordinates('face_bottom')
 			face_left = flm.get_coordinates('face_left')
 			face_right = flm.get_coordinates('face_right')
-			left_eye_corner = flm.get_coordinates('left_eye_corner')
-			right_eye_corner = flm.get_coordinates('right_eye_corner')
+			left_eye_left_corner = flm.get_coordinates('left_eye_left_corner')
+			right_eye_right_corner = flm.get_coordinates('right_eye_right_corner')
 			between_mouth_nose = flm.get_coordinates('between_mouth_nose')
-			roll = int(atan((right_eye_corner[1] - left_eye_corner[1]) / (right_eye_corner[0] - left_eye_corner[0])) * 180 / pi)
-			yaw = int((right_eye_corner[2] - left_eye_corner[2]) * 400)
+			roll = int(atan((right_eye_right_corner[1] - left_eye_left_corner[1]) / (right_eye_right_corner[0] - left_eye_left_corner[0])) * 180 / pi)
+			yaw = int((right_eye_right_corner[2] - left_eye_left_corner[2]) * 400)
 			pitch = int((face_top[2] - between_mouth_nose[2]) * 400)
 			cv2.putText(frame, f'roll = {roll}', (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
 			cv2.putText(frame, f'yaw = {yaw}', (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
@@ -69,7 +70,7 @@ while cap.isOpened():
 				min(boxs[0][0], boxs[3][0]):max(boxs[1][0], boxs[2][0])
 			]
 	cv2.imshow('face_roi', face_roi)
-	cv2.imshow('frame', frame)
+	cv2.imshow('frame', oframe)
 	if cv2.waitKey(1) & 0xFF == 27:
 		break
 cap.release()
