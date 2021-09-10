@@ -14,15 +14,16 @@ def main():
     face_mesh = FaceMesh(1, 0.7, 0.7)
     cvFpsCalc = utils.CvFpsCalc(buffer_len=10)
     face_classification = FaceClassification()
-    classification_time = time.time()
+    classification_time = 0
     ''' Start Loop'''
+    name, credibility = 0, 0
     while True:
         display_fps = cvFpsCalc.get()
         ret, frame = cap.read()
         face_results = face_mesh(frame)
         for face_result in face_results:
             ''' eyes contours'''
-            left_eye_landmarks, right_eye_landmarks = face_mesh.get_eye_landmarks(face_result)
+            # left_eye_landmarks, right_eye_landmarks = face_mesh.get_eye_landmarks(face_result)
             # left_eye_landmarks = np.array(left_eye_landmarks).reshape(-1, 1, 2)
             # cv2.drawContours(frame, left_eye_landmarks, -1, (255, 0, 0), 3)
             # right_eye_landmarks = np.array(right_eye_landmarks).reshape(-1, 1, 2)
@@ -45,7 +46,9 @@ def main():
             print(f'{roll}, {yaw}, {pitch}')
             cv2.imshow('face_roi', face_roi)
             ''' face classification '''
-            name, credibility = face_classification(face_roi, roll)
+            if time.time() - classification_time > 1:
+                classification_time = time.time()
+                name, credibility = face_classification(face_roi, roll)
             ''' display '''
             cv2.rectangle(frame, face_bbox[0], face_bbox[1], (255, 0, 0))
             cv2.putText(frame, f'{name} - {int(credibility)}%', face_bbox[0],
