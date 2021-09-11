@@ -15,6 +15,7 @@ def main():
     cvFpsCalc = utils.CvFpsCalc(buffer_len=10)
     face_classification = FaceClassification()
     classification_time = 0
+    classification_last_pos = (0, 0)
     ''' Start Loop'''
     name, credibility = 0, 0
     while True:
@@ -43,11 +44,15 @@ def main():
             roll, yaw, pitch = face_mesh.get_rotation(face_result)
             ''' get align roi '''
             face_roi = face_classification.get_align_roi(frame, face_result, roll)
-            print(f'{roll}, {yaw}, {pitch}')
+            # print(f'{roll}, {yaw}, {pitch}')
             cv2.imshow('face_roi', face_roi)
             ''' face classification '''
-            if time.time() - classification_time > 1:
+            classification_pos = face_mesh.calc_face_mid(face_result)
+            move_rate = utils.get_distance(classification_pos, classification_last_pos) / (face_bbox[1][0] - face_bbox[0][0])
+            print(move_rate, (face_bbox[1][0] - face_bbox[0][0]))
+            if time.time() - classification_time > 10 or move_rate > 0.5:
                 classification_time = time.time()
+                classification_last_pos = classification_pos
                 name, credibility = face_classification(face_roi, roll)
             ''' display '''
             cv2.rectangle(frame, face_bbox[0], face_bbox[1], (255, 0, 0))

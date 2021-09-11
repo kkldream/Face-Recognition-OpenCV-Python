@@ -70,8 +70,8 @@ class FaceClassification:
         #     troi[1]:troi[1] + max_side
         # ]
         face_roi = frame.copy()[
-            int(roi_mid[1] - max_side / 2):int(roi_mid[1] + max_side / 2),
-            int(roi_mid[0] - max_side / 2):int(roi_mid[0] + max_side / 2)
+            max(0, int(roi_mid[1] - max_side / 2)):int(roi_mid[1] + max_side / 2),
+            max(0, int(roi_mid[0] - max_side / 2)):int(roi_mid[0] + max_side / 2)
         ]
         face_roi = cv2.resize(face_roi, (160, 160))
         return face_roi

@@ -23,6 +23,7 @@ class FaceMesh(object):
         self,
         image,
     ):
+        self.shape = image.shape
         # 推論
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         results = self._face_mesh.process(image)
@@ -201,3 +202,11 @@ class FaceMesh(object):
         # roi_wight = max(utils.get_distance(right_bottom, left_top), utils.get_distance(right_top, left_bottom))
         # roi_hidght = max(utils.get_distance(left_bottom, left_top), utils.get_distance(right_bottom, right_top))
         # roi_max_side = max(roi_wight, roi_hidght)
+        
+    def calc_face_mid(self, landmarks):
+        face_top = landmarks[10]
+        face_bottom = landmarks[152]
+        face_left = landmarks[234]
+        face_right = landmarks[454]
+        face_mid = (int((face_top[0] + face_bottom[0]) / 2), int((face_left[1] + face_right[1]) / 2))
+        return face_mid
