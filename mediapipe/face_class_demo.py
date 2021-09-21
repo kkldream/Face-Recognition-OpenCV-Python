@@ -43,13 +43,13 @@ def main():
             ''' get rotation '''
             roll, yaw, pitch = face_mesh.get_rotation(face_result)
             ''' get align roi '''
-            face_roi = face_classification.get_align_roi(frame, face_result, roll)
+            face_roi = face_mesh.get_align_roi(frame, face_result, roll)
+            face_roi = face_classification.get_resize(face_roi)
             # print(f'{roll}, {yaw}, {pitch}')
             cv2.imshow('face_roi', face_roi)
             ''' face classification '''
             classification_pos = face_mesh.calc_face_mid(face_result)
             move_rate = utils.get_distance(classification_pos, classification_last_pos) / (face_bbox[1][0] - face_bbox[0][0])
-            print(move_rate, (face_bbox[1][0] - face_bbox[0][0]))
             if time.time() - classification_time > 10 or move_rate > 0.5:
                 classification_time = time.time()
                 classification_last_pos = classification_pos
