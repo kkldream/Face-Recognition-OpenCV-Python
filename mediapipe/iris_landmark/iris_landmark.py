@@ -8,7 +8,7 @@ import tensorflow as tf
 class IrisLandmark(object):
     def __init__(
         self,
-        model_path='iris_landmark/iris_landmark.tflite',
+        model_path='models/iris_landmark.tflite',
         num_threads=1,
     ):
         self._interpreter = tf.lite.Interpreter(model_path=model_path,

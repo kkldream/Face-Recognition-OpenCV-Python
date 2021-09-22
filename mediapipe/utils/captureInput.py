@@ -12,8 +12,8 @@ class CaptureInput(cv2.VideoCapture):
         super().__init__(var)
         if type(var) == str:
             self.isVideo = True
-        self.setSize(width, height)
         self.setFps(fps)
+        self.setSize(width, height)
         if info is True:
             self.info()
 
