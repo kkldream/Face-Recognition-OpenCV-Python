@@ -1,1 +1,1 @@
-from eye_blink.Eye import EyeDetection
+from eye_detection.Eye import EyeDetection

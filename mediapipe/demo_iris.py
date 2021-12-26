@@ -1,59 +1,29 @@
 import cv2
 import numpy as np
 import utils
+import time
 from face_mesh import FaceMesh
 from iris_landmark import IrisLandmark
 
 def main():
-    max_num_faces = 1
-    min_detection_confidence = 0.7
-    min_tracking_confidence = 0.7
-
-    # カメラ準備 ###############################################################
+    ''' CaptureInput '''
     cap = utils.CaptureInput(0, 640, 480, 30)
+    # cap = utils.CaptureInput('blink_test.mp4', 960, 540)
     cap.setFlip = True
-
-    # モデルロード #############################################################
-    face_mesh = FaceMesh(
-        max_num_faces,
-        min_detection_confidence,
-        min_tracking_confidence,
-    )
+    ''' Create object '''
+    face_mesh = FaceMesh(1, 0.7, 0.7)
     iris_detector = IrisLandmark()
-
-    # FPS計測モジュール ########################################################
     cvFpsCalc = utils.CvFpsCalc(buffer_len=10)
-
+    ''' Start Loop'''
     while True:
         display_fps = cvFpsCalc.get()
-
-        # カメラキャプチャ #####################################################
-        ret, image = cap.read()
-        debug_image = image.copy()
-
-        # 検出実施 #############################################################
-        # Face Mesh検出
-        face_results = face_mesh(image)
+        ret, frame = cap.read()
+        face_results = face_mesh(frame)
         for face_result in face_results:
-            for face_landmarks in face_result:
-                # for i, data_point in enumerate(face_landmarks.landmark):
-                # pos = (int(cap.width * data_point.x), int(cap.height * data_point.y))
-                pos = face_landmarks[:2]
-                # print(pos)
-                cv2.circle(debug_image, pos, 1, (0, 0, 255), -1)
-            break
-            # 目周辺のバウンディングボックス計算
             left_eye, right_eye = face_mesh.calc_around_eye_bbox(face_result)
-
-            # 虹彩検出
-            left_iris, right_iris = detect_iris(image, iris_detector, left_eye,
-                                                right_eye)
-
-            # 虹彩の外接円を計算
+            left_iris, right_iris = detect_iris(frame, iris_detector, left_eye, right_eye)
             left_center, left_radius = calc_min_enc_losingCircle(left_iris)
             right_center, right_radius = calc_min_enc_losingCircle(right_iris)
-
-            # デバッグ描画
             debug_image = draw_debug_image(
                 debug_image,
                 left_iris,
@@ -63,23 +33,13 @@ def main():
                 right_center,
                 right_radius,
             )
-
-        cv2.putText(debug_image, "FPS:" + str(display_fps), (10, 30),
-                   cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 2, cv2.LINE_AA)
-
-        # キー処理(ESC：終了) #################################################
-        key = cv2.waitKey(1)
-        if key == 27:  # ESC
+        cv2.putText(frame, "FPS:" + str(display_fps), (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+        cv2.imshow('frame', frame)
+        if cv2.waitKey(1) == 27: # ESC
             break
-
-        # 画面反映 #############################################################
-        cv2.imshow('Iris(tflite) Demo', debug_image)
-
     cap.release()
     cv2.destroyAllWindows()
-
-    return
-
 
 def detect_iris(image, iris_detector, left_eye, right_eye):
     image_width, image_height = image.shape[1], image.shape[0]
@@ -134,8 +94,7 @@ def calc_min_enc_losingCircle(landmark_list):
     radius = int(radius)
 
     return center, radius
-
-
+    
 def draw_debug_image(
     debug_image,
     left_iris,
@@ -166,7 +125,6 @@ def draw_debug_image(
                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 1)
 
     return debug_image
-
 
 if __name__ == '__main__':
     main()

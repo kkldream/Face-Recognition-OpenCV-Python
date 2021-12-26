@@ -33,7 +33,7 @@ class EyeDetection:
 		p6 = landmarks[373]
 		right_ear = (utils.get_distance(p2, p6) + utils.get_distance(p3, p5))\
 				/ (2 * utils.get_distance(p1, p4))
-		self.buf[1:-1] = self.buf[:-2]
+		self.buf[1:] = self.buf[:-1]
 		self.buf[0] = left_ear, right_ear
 
 	def _calc_detection(self, fps):

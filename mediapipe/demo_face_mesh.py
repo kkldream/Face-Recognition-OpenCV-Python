@@ -13,6 +13,20 @@ def main():
 		ret, frame = cap.read()
 		face_results = face_mesh(frame)
 		for face_result in face_results:
+			''' face bbox '''
+			face_bbox = face_mesh.calc_face_bbox(face_result)
+			face_mid = face_mesh.calc_face_mid(face_result)
+			roll, yaw, pitch = face_mesh.get_rotation(face_result)
+			all_face_bbox = [
+				face_bbox[0],
+				(face_bbox[0][0], face_bbox[1][1]),
+				face_bbox[1],
+				(face_bbox[1][0], face_bbox[0][1])
+			]
+			rotate_face_bbox = [utils.rotate_xy(all_face_bbox[i], face_mid, roll * -1) for i in range(4)]
+			for i in range(-1, 3):
+				cv2.line(frame, rotate_face_bbox[i], rotate_face_bbox[i+1], (255, 0, 0))
+			''' face 486 point '''
 			for face_landmarks in face_result:
 				pos = face_landmarks[:2]
 				depth = face_landmarks[2]

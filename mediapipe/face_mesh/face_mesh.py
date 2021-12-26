@@ -166,7 +166,9 @@ class FaceMesh(object):
         left_eye_left_corner = landmarks[226]
         right_eye_right_corner = landmarks[446]
         between_mouth_nose = landmarks[164]
-        roll = int(math.atan((right_eye_right_corner[1] - left_eye_left_corner[1]) / (right_eye_right_corner[0] - left_eye_left_corner[0])) * 180 / math.pi)
+        roll = int(math.atan((right_eye_right_corner[1] - left_eye_left_corner[1])\
+                   / (right_eye_right_corner[0] - left_eye_left_corner[0]))\
+                   * 180 / math.pi)
         yaw = int((right_eye_right_corner[2] - left_eye_left_corner[2]) * 400)
         pitch = int((face_top[2] - between_mouth_nose[2]) * 400)
         return roll, yaw, pitch
