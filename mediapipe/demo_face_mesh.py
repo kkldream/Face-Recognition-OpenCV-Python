@@ -36,6 +36,12 @@ def main():
 					cv2.circle(frame, pos, 1, (int(255 * depth * -1 * 50), 0, 0), -1)
 		cv2.putText(frame, "FPS:" + str(display_fps), (10, 30),
 					cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 2, cv2.LINE_AA)
+		cv2.putText(frame, f'roll:{int(roll)}', (10, 60),
+					cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 2, cv2.LINE_AA)
+		cv2.putText(frame, f'yaw:{int(yaw)}', (10, 90),
+					cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 2, cv2.LINE_AA)
+		cv2.putText(frame, f'pitch:{int(pitch)}', (10, 120),
+					cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 2, cv2.LINE_AA)
 		cv2.imshow('frame', frame)
 		if cv2.waitKey(1) == 27: # ESC
 			break

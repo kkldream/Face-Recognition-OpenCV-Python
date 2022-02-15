@@ -3,7 +3,8 @@
 Run the pretrained model to extract 128D face features
 '''
 
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
 # from architecture import inception_resnet_v1 as resnet
 from tensorflow.python.platform import gfile
 import numpy as np
@@ -18,6 +19,7 @@ class FaceFeature(object):
         print("Loading model...")
         with face_rec_graph.graph.as_default():
             self.sess = tf.Session()
+            # self.sess = tf.compat.v1.Session()
             with self.sess.as_default():
                 self.__load_model(model_path)
                 self.x = tf.get_default_graph() \
@@ -46,6 +48,7 @@ class FaceFeature(object):
             print('Model filename: %s' % model_exp)
             with gfile.FastGFile(model_exp, 'rb') as file_:
                 graph_def = tf.GraphDef()
+                # graph_def = tf.compat.v1.GraphDef()
                 graph_def.ParseFromString(file_.read())
                 tf.import_graph_def(graph_def, name='')
         else:
