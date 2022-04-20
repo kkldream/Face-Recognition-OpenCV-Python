@@ -1,0 +1,1 @@
+..\..\venv\Scripts\tensorboard --logdir=logs
