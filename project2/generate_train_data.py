@@ -20,7 +20,6 @@ def main():
     entropy = Entropy()
     ''' os '''
     file_list = []
-    train_y = []
     for f in dirFile:
         if f[-4:] == '.csv':
             file_list.append(f[:-4])
@@ -41,7 +40,7 @@ def main():
         # with FaceMesh(1, 0.7, 0.7) as face_mesh:
         face_mesh = FaceMesh(1, 0.7, 0.7)
         cap = cv2.VideoCapture(video_file_path)
-        last_rotation = 0, 0, 0
+        mode = f[f.find('-') + 1:][f[f.find('-') + 1:].find('-')+1:]
         for times in range(len(train_y)):
             ttnum += 1
             # print(f'times = {times}')
@@ -70,6 +69,7 @@ def main():
                 f'Sec: {times / 30:.2f}',
                 f'Frame: {times + 1}/{len(train_y)}',
                 f'Y_train:',
+                f'  mode: {mode}',
                 f'  Level: {train_y[times]}',
                 f'X_train:',
                 f'  mar: {mar:.2f}',
@@ -81,6 +81,7 @@ def main():
             ))
             fileAppendTextLine(json.dumps({
                 'index': times + 1,
+                'mode': mode,
                 'level': train_y[times],
                 'mar': mar,
                 'ear_l': ear[0],

@@ -30,7 +30,6 @@ def main():
         ret, frame = cap.read()
         entropy.set_shape(frame.shape)
         face_results = face_mesh(frame)
-        rotation = 0, 0, 0
         for face_result in face_results:
             ''' mouth detection '''
             mar = calc_mar(face_result)
