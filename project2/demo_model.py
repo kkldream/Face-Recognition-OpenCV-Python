@@ -8,13 +8,14 @@ from keras.models import load_model
 from EntropyClass import Entropy
 
 # my_model = load_model('models/2022_04_19-14_54_12-Conv2-params_36353-batch_256-optimizer_adam-loss_mse/epoch_065-val_loss_0.002.hdf5')
-my_model = load_model(
-    'models/2022_04_19-15_54_46-Conv2_dense-params_122177-batch_256-optimizer_adam-loss_mse/epoch_139-val_loss_0.000.hdf5')
+my_model = load_model('model.hdf5')
 
 
 def main():
     level = 0
-    TestList = np.zeros((600, 2))
+    mar = 0
+    H_f = 0
+    TestList = np.zeros((300, 2))
     ''' CaptureInput '''
     # cap = utils.CaptureInput(0, 640, 480, 30)
     cap = utils.CaptureInput('../dataset/YawDD/test/1-MaleGlasses.avi')
@@ -33,27 +34,28 @@ def main():
         for face_result in face_results:
             ''' mouth detection '''
             mar = calc_mar(face_result)
-            ear = calc_ear(face_result)
             H_f = entropy(face_result)
             draw_mouth_edge(frame, face_result)
             draw_eye_edge(frame, face_result)
             Test = np.array([
                 mar,
-                (ear[0] + ear[1]) / 2,
                 map(H_f, 0, 30, 0, 1)
             ])
             TestList[:-1] = TestList[1:]
             TestList[-1] = Test
             predicted = my_model.predict([
                 np.array([TestList[:, 0]]),
-                np.array([TestList[:, 1]]),
-                np.array([map(H_f, 0, 30, 0, 1)])
+                np.array([TestList[-1, 1]])
             ])
-            level = max(0, min(5, int(predicted[0, 0] * 10)))
+            level = max(0, min(1, predicted[0, 0]))
         ''' display '''
         cv2.putText(frame, "FPS:" + str(display_fps), (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.putText(frame, "Level:" + str(level), (10, 60),
+        cv2.putText(frame, f'Level:{int(level * 100)}%', (10, 60),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        cv2.putText(frame, "mar:" + f'{mar:.2f}', (10, 90),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        cv2.putText(frame, "H_f:" + f'{H_f:.2f}', (10, 120),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         cv2.imshow('frame', frame)
         key = cv2.waitKey(1)

@@ -6,6 +6,9 @@ from face_mesh import FaceMesh
 def main():
 	cap = utils.CaptureInput(0, 640, 480, 30)
 	cap.setFlip = True
+	
+	# cap = utils.CaptureInput("C:/Users/kk693/Desktop/Git-Repository/Fatigue-Driving-Detection/dataset/YawDD/train/4-FemaleGlasses-Yawning.avi")
+	
 	face_mesh = FaceMesh(1, 0.7, 0.7)
 	cvFpsCalc = utils.CvFpsCalc(buffer_len=10)
 	while True:

@@ -19,14 +19,14 @@ def main():
         entropy.set_shape(frame.shape)
         face_results = face_mesh(frame)
         for face_result in face_results:
-            H_f = entropy(face_result)
-            # H_f, info = entropy(face_result, info=True)
+            # H_f = entropy(face_result)
+            H_f, info = entropy(face_result, info=True)
             drawText(frame, f'H_f = {H_f:.2f}', 2)
-            # FFT = info['FFT']
-            # cv2.line(frame, FFT[0], FFT[1], (255, 0, 0), 2)
-            # cv2.line(frame, FFT[0], FFT[2], (255, 0, 0), 2)
-            # cv2.line(frame, FFT[1], FFT[2], (255, 0, 0), 2)
-            # [cv2.circle(frame, p, 3, (0, 0, 255), -1) for p in FFT]
+            FFT = info['FFT']
+            cv2.line(frame, FFT[0], FFT[1], (255, 0, 0), 2)
+            cv2.line(frame, FFT[0], FFT[2], (255, 0, 0), 2)
+            cv2.line(frame, FFT[1], FFT[2], (255, 0, 0), 2)
+            [cv2.circle(frame, p, 3, (0, 0, 255), -1) for p in FFT]
             # FFV = info['FFV']
             # S_0 = info['S_0']
             # S = info['S']

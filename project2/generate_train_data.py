@@ -17,7 +17,6 @@ def main():
     fileClean()
     ''' Create object '''
     cv_fps_calc = utils.CvFpsCalc(buffer_len=10)
-    entropy = Entropy()
     ''' os '''
     file_list = []
     for f in dirFile:
@@ -25,6 +24,7 @@ def main():
             file_list.append(f[:-4])
     ttnum = 0
     for i, f in enumerate(file_list):
+        entropy = Entropy()
         marker_file_path = f'{marker_path}{f}.csv'
         video_file_path = f'{video_path}{f}.avi'
         train_y = read_csv(marker_file_path)
@@ -75,6 +75,7 @@ def main():
                 f'  mar: {mar:.2f}',
                 f'  ear_l: {ear[0]:.2f}',
                 f'  ear_r: {ear[1]:.2f}',
+                f'  entropy: {H_f:.2f}',
                 f'  roll: {rotation[0]:.2f}',
                 f'  yaw: {rotation[1]:.2f}',
                 f'  pitch: {rotation[2]:.2f}'
