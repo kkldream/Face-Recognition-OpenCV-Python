@@ -17,10 +17,10 @@ def main():
     ear = 0
     rotation = 0
     H_f = 0
-    TestList = np.zeros((300, 3))
+    TestList = np.zeros((300, 5))
     ''' CaptureInput '''
-    cap = utils.CaptureInput(0, 640, 480, 30)
-    # cap = utils.CaptureInput('../dataset/YawDD/test/15-MaleGlasses.avi')
+    # cap = utils.CaptureInput(0, 640, 480, 30)
+    cap = utils.CaptureInput('../dataset/YawDD/test/15-MaleGlasses.avi')
     # cap = utils.CaptureInput('blink_test.mp4', 960, 540)
     cap.setFlip = True
     ''' Create object '''
@@ -64,11 +64,11 @@ def main():
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         cv2.putText(frame, "mar:" + f'{mar:.2f}', (10, 90),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.putText(frame, "ear:" + f'{ear:.2f}', (10, 120),
+        cv2.putText(frame, "ear:" + f'{ear[0]:.2f}, {ear[1]:.2f})', (10, 120),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        # cv2.putText(frame, "yaw:" + f'{rotation[1]:.2f}', (10, 150),
-        #             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.putText(frame, "H_f:" + f'{H_f:.2f}', (10, 150),
+        cv2.putText(frame, "yaw:" + f'{rotation[1]:.2f}', (10, 150),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        cv2.putText(frame, "H_f:" + f'{H_f:.2f}', (10, 180),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         cv2.imshow('frame', frame)
         key = cv2.waitKey(1)

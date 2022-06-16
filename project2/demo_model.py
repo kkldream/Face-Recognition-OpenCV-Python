@@ -8,7 +8,7 @@ from keras.models import load_model
 from EntropyClass import Entropy
 
 # my_model = load_model('models/2022_04_19-14_54_12-Conv2-params_36353-batch_256-optimizer_adam-loss_mse/epoch_065-val_loss_0.002.hdf5')
-my_model = load_model('model.hdf5')
+my_model = load_model('model.h5')
 
 
 def main():
@@ -34,11 +34,18 @@ def main():
         for face_result in face_results:
             ''' mouth detection '''
             mar = calc_mar(face_result)
+            ear = calc_ear(face_result)
             H_f = entropy(face_result)
+            rotation = face_mesh.get_rotation(face_result)
             draw_mouth_edge(frame, face_result)
             draw_eye_edge(frame, face_result)
+            if rotation[1] >= 0:
+                ear = ear[0]
+            else:
+                ear = ear[1]
             Test = np.array([
-                mar,
+                norm_max_min(mjson['mar'], 0, 1),
+                ear,
                 map(H_f, 0, 30, 0, 1)
             ])
             TestList[:-1] = TestList[1:]
